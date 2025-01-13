@@ -5,14 +5,14 @@
 ###### //https://s3.amazonaws.com/stelligent-public/cloudformation-templates/github/labs/codebuild/codebuild-cpl-cd-cc.json
 
 # Steps:
-## 1.	create an S3 bucket 
-create a bucket in ***us-east-1** with  syntax `codepipeline-<region-code>-<accountID>`, e.g codepipeline-us-east-1-5678543245
+## 1.	create an S3 artifact bucket 
+Create a bucket in ***us-east-1*** with  syntax `codepipeline-<region-code>-<accountID>`, e.g codepipeline-us-east-1-5678543245
 ## 2.	Configure Credentials:
 Generate a GitHub Token. This token will be used by AWS pipeline to authenticate to GitHub. 
 
 ### How to Generate a GitHub Personal Access Token (PAT)
 
-for public GitHub repositories, AWS CodePipeline still requires an OAuth token for authentication. This token is used for securely accessing GitHub, even if the repository is public.
+For public GitHub repositories, AWS CodePipeline still requires an OAuth token for authentication. This token is used for securely accessing GitHub, even if the repository is public.
 
 A Personal Access Token (PAT) allows AWS CodePipeline to authenticate and access your GitHub repositories, even public ones.
 
