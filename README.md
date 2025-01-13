@@ -60,6 +60,9 @@ A Personal Access Token (PAT) allows AWS CodePipeline to authenticate and access
 AWS CodePipeline should now be able to authenticate with GitHub using your token stored in Secrets Manager.
 
 ## 3  Fork Sample Application repository into your GitHub space
+- Fork this repository into your GitHub space
 
 ## 4  Deploy Cloud Formation Template and configure necessary parameters.
+- Create a keypair --> to be used by the stack. This template has a `nested CodeDeployEC2 Instance Stack` that creates and configure and EC2 for deployment. 
+- Copy the cloudformation template [here](https://github.com/mecbob/AWS-DevTools-GitHub/blob/main/aws-developerTools-GitHub.json) and deploy in ***us-east-1***
 
