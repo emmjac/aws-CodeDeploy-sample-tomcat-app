@@ -1,29 +1,62 @@
-# EC2 Examples
-EC2 Examples. 
-
-Copy the contents of this folder and its subfolders to the CodeCommit repo 
-
-# Overview
-This repo is a demonstration of Continuous Delivery of a static website to EC2 instances via CodePipeline, CodeCommit, CodeBuild, and CodeDeploy. Ensure you've configured the [Prerequisites](https://github.com/stelligent/devops-essentials/wiki/Prerequisites) before launching the stack below.
-
-# Launch Stack
-
-[![Launch CFN stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/create/template?stackName=devops-essentials-ec2&templateURL=https://s3.amazonaws.com/www.devopsessentialsaws.com/samples/ec2/pipeline.yml)
-
-# Configure Solution
-
-1. Once the CloudFormation stack is successful, select the checkbox next to the stack and click the **Outputs** tab. 
-1. From Outputs, click on the **PipelineUrl** output. The Source action will be in a failed state.
-1. From the CodePipeline Source action, click on the CodeCommit provider and copy the **git clone** statement provided by CodeCommit
-1. Paste the command in your Terminal
-1. Copy **all** of the contents from [this](../ec2) folder to your locally cloned CodeCommit Git repo
-1. From your Terminal, type `git add .`
-1. From your Terminal, type `git commit -am "add new files"`
-1. From your Terminal, type `git push`
-1. Go back to your pipeline in CodePipeline and see the changes flow through the pipeline
-1. Once the pipeline is complete, go to your CloudFormation Outputs and click on the **CodeDeployURL** Output to get to the EC2 instance for which CodeDeploy has deployed the application
 
 
-# Resources
 
-1. The CloudFormation template is available [here](https://s3.amazonaws.com/www.devopsessentialsaws.com/samples/ec2/pipeline.yml).
+# CI-CD pipeline using AWS Developer Tools ( CodeBuild, CodeDeploy and and CodePipeline) 
+###### //https://s3.amazonaws.com/stelligent-public/cloudformation-templates/github/labs/codebuild/codebuild-cpl-cd-cc.json
+
+# Steps:
+## 1.	create an S3 bucket with  the name syntax codepipeline-<region-code>-<accountID>, e.g codepipeline-us-east-1-5678543245
+## 2.	Configure Credentials:
+	Generate a GitHub Token. This token will be used by AWS pipeline to authenticate to GitHub. 
+	How to Generate a GitHub Personal Access Token (PAT)
+	for public GitHub repositories, AWS CodePipeline still requires an OAuth token for authentication. This token is used for securely accessing GitHub, even if the repository is public.
+	A Personal Access Token (PAT) allows AWS CodePipeline to authenticate and access your GitHub repositories, even public ones.
+
+#### 1. Log into GitHub
+#### 2. Navigate to Developer Settings
+	⁃	Click on your profile picture (top-right corner).
+	⁃	Go to Settings → Scroll down → Developer settings.
+
+#### 3. Generate a New Token
+	⁃	In the sidebar, select Personal access tokens → Tokens (classic).
+	⁃	Click on Generate new token → Generate new token (classic).
+
+#### 4. Configure the Token
+	◦	Note: For public repositories, minimal scopes are required.
+	◦	Token Name: CodePipelineToken (or any name you prefer)
+	◦	Expiration: Choose an expiration date (e.g., 90 days).
+	◦	Scopes (Permissions): Select the following:
+	⁃	✅ repo → Full control of private repositories (optional for public repos)
+	⁃	✅ admin:repo_hook → Manage repository hooks (important for triggering builds)
+
+#### 5. Generate and Copy the Token
+	◦	Click Generate token.
+	◦	Important: Copy the token immediately. GitHub won’t show it again.
+
+
+### Store the Token in AWS Secrets Manager
+	⁃	Open AWS Console → Secrets Manager.
+	⁃	Click Store a new secret.
+	⁃	Select Other type of secret.
+	⁃	Key: OAuthToken → Value: Paste the GitHub token here.
+	⁃	Secret Name: GitHubToken.
+	⁃	Click Next → Store.
+
+
+	Confirm Permissions
+	Ensure CodePipeline has permission to access Secrets Manager:
+	Sample  Policy:
+	{
+ 	 "Effect": "Allow",
+ 	 "Action": [
+  	  "secretsmanager:GetSecretValue"
+  	],
+  	"Resource": "*"
+	}
+
+	AWS CodePipeline should now be able to authenticate with GitHub using your token stored in Secrets Manager.
+
+## 3  Fork Sample Application repository into your GitHub space
+
+## 4  Deploy Cloud Formation Template and configure necessary parameters.
+
